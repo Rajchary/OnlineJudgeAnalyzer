@@ -1,0 +1,136 @@
+<html>
+    <head>
+        <title>
+            Online Judge Analyzer
+        </title>
+        <link rel="stylesheet" type="text/css" href="css\primaryStyles.css">
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    </head>
+    <body onload="init()">
+        <center>
+        <h1>Welcome To OnlineJudgeAnalyzer</h1><br/>
+        <h2 style="margin-bottom:25px">Signin</h2>
+        <div class="formContainer">
+            <form>
+                <div class="form-left">
+                <div class="form-group">
+                    <label for="roll_email" >Roll No(or)Email:</label>
+                    <input type="text" class="form-control" id="roll_email" required style="width:300px;">
+                </div>
+                <div class="form-group">
+                    <label for="pass" >Password:</label>
+                    <input type="password" class="form-control" id="pass" required style="width:300px;">
+                </div>
+                <div class="form-group">
+                    <label for="name" >Name:</label>
+                    <input type="text" class="form-control" id="name" required style="width:300px;">
+                </div>
+                <div class="form-group">
+                    <label for="branch" >Branch:</label><br/>
+                    <select class="form-select" id="branch">
+                        <option selected>Select your branch</option>
+                        <option value="cse">Computer Science & Engineering</option>
+                        <option value="it">Information Technology</option>
+                        <option value="eee">Electrical & Electronics Engineering</option>
+                        <option value="ece">Electronics & Communication Engineering</option>
+                        <option value="cvl">Civil Engineering</option>
+                        <option value="mec">Mechanical Engineering</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="py" >Passout Year:</label><br/>
+                    <select class="form-select" id="py">
+                        <option selected>Select your passout year</option>
+                        <option value="2019">2019</option>
+                        <option value="2020">2020</option>
+                        <option value="2021">2021</option>
+                        <option value="2022">2022</option>
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                    </select>
+                </div>
+                
+            </div>
+            <div class="form-right">
+                <div class="form-group">
+                    <label for="hu" >Hackerrank Username:</label>
+                    <input type="text" class="form-control" id="hu" required style="width:300px;">
+                </div>
+                <div class="form-group">
+                    <label for="cu" >CodeChef Username:</label>
+                    <input type="text" class="form-control" id="cu" required style="width:300px;">
+                </div>
+                <div class="form-group">
+                    <label for="cfu" >CodeForces Username:</label>
+                    <input type="text" class="form-control" id="cfu" required style="width:300px;">
+                </div>
+                <div class="form-group">
+                    <label for="spoj" >Spoj Username:</label>
+                    <input type="text" class="form-control" id="spoj" required style="width:300px;">
+                </div>
+                <div class="form-group">
+                    <label for="ibu" >InterviewBit Username:</label>
+                    <input type="text" class="form-control" id="ibu" required style="width:300px;">
+                </div>
+            </div><br/>
+            <div style="width: 400px; height: 50px; margin-top:450px;">
+                <input type="submit" class="submit-btn" value="Submit" onclick="sign_in()">
+                <input type="reset" class="clear-btn" value="Clear">
+            </div>
+            </form>
+        </div>
+        </center>
+    </body>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  function init()
+  {
+        var firebaseConfig = {
+        apiKey: "AIzaSyC0-0VEr_p7XxTE9u5nJtdUJ75fkWA5L6Q",
+        authDomain: "onlinejudgeanalyzer.firebaseapp.com",
+        projectId: "onlinejudgeanalyzer",
+        storageBucket: "onlinejudgeanalyzer.appspot.com",
+        messagingSenderId: "202774544058",
+        appId: "1:202774544058:web:a43e02287ac1986be08c83",
+        measurementId: "G-KMG62JHYHR"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+        //alert("done");
+  }
+</script>
+<script>
+    function sign_in()
+    {
+        alert("Working");
+        const user_id = document.getElementById("roll_email").value;
+        const password = document.getElementById("pass").value;
+        const name = document.getElementById("name").value;
+        const branch = document.getElementById("branch").value;
+        const py = document.getElementById("pass").value;
+        const hu = document.getElementById("hu").value;
+        const cu = document.getElementById("cu").value;
+        const cfu = document.getElementById("cfu").value;
+        const spoj = document.getElementById("spoj").value;
+        const ibu = document.getElementById("ibu").value;
+        const database = firebase.firestore();
+
+        database.collection('users').doc(user_id).set(
+            {
+                Name:name,
+                
+            }
+        )
+    }
+</script>
+</html>

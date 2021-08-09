@@ -1,0 +1,62 @@
+body
+{
+    background-color: whitesmoke;
+}
+.formContainer
+{
+    background-color: white;
+    margin:25px;
+    margin-left:100px;
+    margin-right:100px;
+    box-shadow: 0px 0px 2px 2px #BDBDBD;
+    height: 600px;
+    border-radius: 25px;
+    padding-top:20px;
+}
+.form-left
+{
+    float: left;
+    margin-left: 5%;
+}
+.form-right
+{
+    float: right;
+    margin-right:15%;
+}
+.submit-btn
+{
+    width:150px;
+    height:50px;
+    cursor:pointer;
+    background-color: teal;
+    border-radius: 7px;
+    color: white;
+    font-size:15pt;
+    float:left;
+    border-color: teal;
+    transition: all .3s;
+}
+.submit-btn:hover
+{
+    background-color: white;
+    color: teal;
+}
+.clear-btn
+{
+    width:150px;
+    height:50px;
+   /* margin-top:450px;*/
+    cursor:pointer;
+    background-color: red;
+    border-radius: 7px;
+    color: white;
+    font-size:15pt;
+    float:right;
+    border-color: red;
+    transition: all .3s;
+}
+.clear-btn:hover
+{
+    background-color: white;
+    color: red;
+}

@@ -1,0 +1,181 @@
+<html >
+    <head>
+        <title>
+            Online Judge Analyzer
+        </title>
+        <link rel="stylesheet" type="text/css" href="css\primaryStyles.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css">
+        <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
+        <link href='https://fonts.googleapis.com/css?family=Lora' rel='stylesheet'>
+        <style> 
+            h1
+            {
+                margin: 25px;
+                color: red;
+                font-family: 'Lora';
+            }
+        </style>
+        </head>
+    <body class="dashBoard-body" onload="init()">
+        <div class="banner">
+            <br/>
+           <a href="">
+               <img src="assets/icons/home_30_active.png" alt="home icon" class="banner-icon"style="margin-top:180px;" title="Home">
+            </a>
+            <a href="">
+               <img src="assets/icons/leaderBoard_30_in_active.png" alt="leader board icon" class="banner-icon" title="Leader Board">
+            </a>
+            <a href="">
+               <img src="assets/icons/profile_30_in_active.png" alt="User profile icon" class="banner-icon" title="User Profile">
+            </a>
+            <a href="index.html">
+               <img src="assets/icons/signout_30.png" alt="Signout icon" class="banner-icon" title="Signout">
+            </a>
+        </div>
+        <center>
+            <h1>Welcome to the dash board !!</h1>
+            <div>
+            <div class="card" style="margin-left:250px;" id="card">
+                <p class="card-title">Code Cheff</p>
+                <p class="card-info-title" >Current Rating : </p>
+                 <p class="card-info-answer" id="cc_rating">9063</p><br/>
+                <p class="card-info-title">Stars : </p>
+                 <p class="card-info-answer" id="cc_stars">2*</p><br/>
+                <p class="card-info-title">Highest Rating : </p>
+                 <p class="card-info-answer" id="cc_hrating">1603</p><br/>
+                <p class="card-info-title">Problems Solved : </p>
+                 <p class="card-info-answer" id="cc_psolved">74</p><br/>
+            </div>
+            <div class="card" id="card">
+                <p class="card-title">Code Forces</p>
+                <p class="card-info-title">Current Rating : </p>
+                 <p class="card-info-answer" id="cf_rating">1071</p><br/>
+                <p class="card-info-title">Maximum Rating : </p>
+                 <p class="card-info-answer" id="cf_mrating">1371</p><br/>
+            </div>
+            <div class="card" id="card">
+                <p class="card-title">Spoj</p>
+                <p class="card-info-title">Current Rank : </p>
+                 <p class="card-info-answer" id="s_rank">942750</p><br/>
+                <p class="card-info-title" >Problems Solved : </p>
+                 <p class="card-info-answer" id="s_psolved">13</p><br/>
+                <p class="card-info-title">Points : </p>
+                 <p class="card-info-answer" id="s_points">0</p><br/>
+            </div>
+        </div>
+        <div >
+            <div class="card" style="margin-left:350px;margin-bottom:150px;" id="card">
+                <p class="card-title">Interview Bit</p>
+                <p class="card-info-title">Current Rank : </p>
+                 <p class="card-info-answer" id="ib_rank">942750</p><br/>
+                <p class="card-info-title" >Total Score  : </p>
+                 <p class="card-info-answer" id="ib_score">9063</p><br/>
+                <p class="card-info-title">Streak : </p>
+                 <p class="card-info-answer" id="ib_streak">0</p><br/>
+            </div>
+            <div class="card" id="card">
+                <p class="card-title">Hackerrank</p>
+                <p class="card-title" style="color: tomato;">Coming Soon...</p>
+            </div>
+        </div>
+        </center>
+    </body>
+    <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-firestore.js"></script>
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-analytics.js"></script>
+    <script>
+        var cc_rating,cc_stars,cc_hrating,cc_psolved;
+        var cf_rating,cf_mrating;
+        var s_rank,s_psolved,s_points;
+        var ib_rank,ib_score,ib_streak;
+        //Code cheff
+        cc_rating = document.getElementById("cc_rating");
+        cc_hrating = document.getElementById("cc_hrating");
+        cc_stars = document.getElementById("cc_stars");
+        cc_psolved = document.getElementById("cc_psolved");
+        //Code Forces
+        cf_rating = document.getElementById("cf_rating");
+        cf_mrating = document.getElementById("cf_mrating");
+        //Spoj
+        s_rank = document.getElementById("s_rank");
+        s_psolved = document.getElementById("s_psolved");
+        s_points = document.getElementById("s_points");
+        //Inerview Bit
+        ib_rank = document.getElementById("ib_rank");
+        ib_score = document.getElementById("ib_score");
+        ib_streak = document.getElementById("ib_streak");
+
+        var username;
+        function init()
+        {
+            var firebaseConfig = {
+            apiKey: "AIzaSyC0-0VEr_p7XxTE9u5nJtdUJ75fkWA5L6Q",
+            authDomain: "onlinejudgeanalyzer.firebaseapp.com",
+            projectId: "onlinejudgeanalyzer",
+            storageBucket: "onlinejudgeanalyzer.appspot.com",
+            messagingSenderId: "202774544058",
+            appId: "1:202774544058:web:a43e02287ac1986be08c83",
+            measurementId: "G-KMG62JHYHR"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+            username = location.search.substring(1);
+            fetchData(username);
+
+        }
+        function fetchData(userName)
+        {
+          //  alert(userName);
+            var cards = document.getElementsByClassName("card");
+            var database = firebase.firestore();
+            database.collection("codechef").doc(userName).get()
+            .then((doc)=>{
+                cc_rating.innerHTML = ""+doc.data().Rating+"";
+                cc_hrating.innerHTML = ""+doc.data().Highest_Rating+"";
+                cc_stars.innerHTML = ""+doc.data().Stars+"";
+                cc_psolved.innerHTML = ""+doc.data().Solved+"";
+                
+            }).then(()=>{
+                database.collection("codeforces").doc(userName).get()
+                .then((doc)=>{
+                    cf_rating.innerHTML = ""+doc.data().Rating+"";
+                    cf_mrating.innerHTML = ""+doc.data().Max_Rating+"";
+                });
+            }).then(()=>{
+                database.collection("spoj").doc(userName).get()
+                .then((doc)=>{
+                    s_rank.innerHTML = ""+doc.data().Rank+"";
+                    s_psolved.innerHTML = ""+doc.data().Solved+"";
+                    s_points.innerHTML = ""+doc.data().Points+"";
+                });
+            }).then(()=>{
+                database.collection("interviewbit").doc(userName).get()
+                .then((doc)=>{
+                    ib_rank.innerHTML = ""+doc.data().Rank+"";
+                    ib_score.innerHTML = ""+doc.data().Score+"";
+                    ib_streak.innerHTML = ""+doc.data().Streak+"";
+                });
+            }).then(()=>{
+                for(var i=0;i<cards.length;i++)
+            {
+               // cards[i].style.display = "block";
+                cards[i].style.visibility = "visible";
+                if(i==0)
+                    cards[i].style.marginLeft = "250px";
+                else if(i==3)
+                    cards[i].style.marginLeft = "350px";
+                else
+                    cards[i].style.marginLeft = "100px";
+                cards[i].style.opacity="1";
+            }
+            })
+            
+            
+        }
+    </script>    
+</html>

@@ -1,0 +1,308 @@
+<html>
+
+<head>
+    <title>
+        Online Judge Analyzer
+    </title>
+    <link rel="stylesheet" type="text/css" href="css\primaryStyles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+
+<body onload="init()">
+    <center>
+        <h1>Welcome To OnlineJudgeAnalyzer</h1><br />
+        <h2 style="margin-bottom:25px">Signin</h2>
+        <div class="formContainer">
+
+            <div class="form-left">
+                <div class="form-group">
+                    <label for="roll_email">Roll No(or)Email:</label>
+                    <input type="text" class="form-control" id="roll_email" required style="width:300px;">
+                </div>
+                <div class="form-group">
+                    <label for="pass">Password:</label>
+                    <input type="password" class="form-control" id="pass" required style="width:300px;">
+                </div>
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" class="form-control" id="name" required style="width:300px;">
+                </div>
+                <div class="form-group">
+                    <label for="branch">Branch:</label><br />
+                    <select class="form-select" id="branch">
+                        <option selected value="start">Select your branch</option>
+                        <option value="cse">Computer Science & Engineering</option>
+                        <option value="it">Information Technology</option>
+                        <option value="eee">Electrical & Electronics Engineering</option>
+                        <option value="ece">Electronics & Communication Engineering</option>
+                        <option value="cvl">Civil Engineering</option>
+                        <option value="mec">Mechanical Engineering</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="py">Passout Year:</label><br />
+                    <select class="form-select" id="py">
+                        <option selected value="start">Select your passout year</option>
+                        <option value="2019">2019</option>
+                        <option value="2020">2020</option>
+                        <option value="2021">2021</option>
+                        <option value="2022">2022</option>
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="form-right">
+                <div class="form-group">
+                    <label for="hu">Hackerrank Username:</label>
+                    <input type="text" class="form-control" id="hu" required style="width:300px;">
+                </div>
+                <div class="form-group">
+                    <label for="cu">CodeChef Username:</label>
+                    <input type="text" class="form-control" id="cu" required style="width:300px;">
+                </div>
+                <div class="form-group">
+                    <label for="cfu">CodeForces Username:</label>
+                    <input type="text" class="form-control" id="cfu" required style="width:300px;">
+                </div>
+                <div class="form-group">
+                    <label for="spoj">Spoj Username:</label>
+                    <input type="text" class="form-control" id="spoj" required style="width:300px;">
+                </div>
+                <div class="form-group">
+                    <label for="ibu">InterviewBit Username:</label>
+                    <input type="text" class="form-control" id="ibu" required style="width:300px;">
+                </div>
+            </div><br />
+            <div class="intimate" id="intimate">
+                <div class="intimate-content">
+                    <p>Registration is going on please wait..</p>
+                </div>
+            </div>
+            <div style="width: 400px; height: 50px; margin-top:450px;">
+                <button class="submit-btn" onclick="sign_in()">Submit</button>
+                <input type="reset" class="clear-btn" value="Clear">
+            </div>
+
+        </div>
+        <p class="hint">Already have an account Signin 
+            <a href="index.html">here<img src="assets/icons/signin_30.png"
+                 class="banner-icon" style="margin-bottom: -15px;"></img></a></p><br/><br/><br/>
+    </center>
+</body>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-firestore.js"></script>
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-analytics.js"></script>
+
+<script>
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    function init() {
+        var firebaseConfig = {
+            apiKey: "AIzaSyC0-0VEr_p7XxTE9u5nJtdUJ75fkWA5L6Q",
+            authDomain: "onlinejudgeanalyzer.firebaseapp.com",
+            projectId: "onlinejudgeanalyzer",
+            storageBucket: "onlinejudgeanalyzer.appspot.com",
+            messagingSenderId: "202774544058",
+            appId: "1:202774544058:web:a43e02287ac1986be08c83",
+            measurementId: "G-KMG62JHYHR"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+        //alert("done");
+    }
+</script>
+<script>
+
+    var user_id, password, name, branch, py;
+    var h_score;
+    var cc_score, cc_stars, highest_rating, p_solved;
+    var cf_score, cf_maxRating;
+    var sp_score, sp_points, sp_solved;
+    var ib_score, ib_rank, ib_streak;
+    var hu, cu, cfu, spoj, ibu;
+    var total_score=0;
+    async function fetch_and_storeData() {
+        var cc_url = "https://competitive-coding-api.herokuapp.com/api/codechef/" + cu;
+        var cf_url = "https://competitive-coding-api.herokuapp.com/api/codeforces/" + cfu;
+        var spoj_url = "https://competitive-coding-api.herokuapp.com/api/spoj/" + spoj;
+        var ibu_url = "https://competitive-coding-api.herokuapp.com/api/interviewbit/" + ibu;
+        fetch(cc_url)
+            .then(res => res.json())
+            .then((out) => {
+                cc_score = out['rating'];
+                cc_stars = out['stars'];
+                highest_rating = out['highest_rating'];
+                p_solved = out['fully_solved']['count'];
+                total_score+= (p_solved*10)+(((cc_score-1300)*(cc_score-1300))/30);
+             //   alert("Code Chef score " + total_score);
+            }).then(() => {
+                fetch(cf_url)
+                    .then(res => res.json())
+                    .then((out) => {
+                        cf_score = out['rating'];
+                        cf_maxRating = out['max rating'];
+                        total_score+=cf_score;
+                     //   alert("Code forces rating " + cf_score);
+                    }).then(() => {
+                        fetch(spoj_url)
+                            .then(res => res.json())
+                            .then((out) => {
+                                sp_score = out['rank'];
+                                sp_points = out['points'];
+                                sp_solved = out['solved'].length;
+                                total_score+= (sp_points*500+sp_solved*20);
+                               // alert("Spoj score " + sp_score);
+                            }).then(() => {
+                                fetch(ibu_url)
+                                    .then(res => res.json())
+                                    .then((out) => {
+                                        ib_score = out['score'];
+                                        ib_rank = out['rank'];
+                                        ib_streak = out['streak'];
+                                        total_score+=ib_score/3;
+                                     //   alert("Total score " + total_score);
+                                    }).then(() => {
+                                        total_score = Math.round(total_score);
+                                        const database = firebase.firestore();
+                                        database.collection('users').doc(user_id).set(
+                                            {
+                                                RollNo: user_id,
+                                                Name: name,
+                                                Password: password,
+                                                Branch: branch,
+                                                YearOfPassOut: py,
+                                                Total_Score:total_score,
+                                                Hackerrank_Username: hu,
+                                                Codechef_Username: cu,
+                                                Codeforces_Username: cfu,
+                                                Spoj_Username: spoj,
+                                                InterviewBit_Username: ibu
+                                            }
+                                        ).then(() => {
+                                            
+                                            database.collection("codechef").doc(user_id).set({
+                                                Rating: cc_score,
+                                                Highest_Rating: highest_rating,
+                                                Stars: cc_stars,
+                                                Solved: p_solved
+                                            }).then(() => {
+                                                database.collection("codeforces").doc(user_id).set({
+                                                    Rating: cf_score,
+                                                    Max_Rating: cf_maxRating
+                                                }).then(() => {
+                                                    database.collection("spoj").doc(user_id).set({
+                                                        Rank: sp_score,
+                                                        Points: sp_points,
+                                                        Solved: sp_solved
+                                                    }).then(() => {
+                                                        database.collection("interviewbit").doc(user_id).set({
+                                                            Score: ib_score,
+                                                            Rank: ib_rank,
+                                                            Streak: ib_streak
+                                                        }).then(() => {
+                                                            location.href = "dashBoard.html?"+user_id;
+                                                        });
+                                                    });
+                                                });
+                                            });
+                                        }).catch((error) => {
+                                            console.log("Error adding document: ", error);
+                                        });
+                                    });
+                            });
+                    });
+            });
+
+
+    }
+    function validate() {
+        if (user_id == "") {
+            document.getElementById("roll_email").focus();
+            alert("fill out the username");
+            return false;
+        }
+        if (password == "") {
+            alert("fill out the password");
+            document.getElementById("pass").focus();
+            return false;
+        }
+        if (name == "") {
+            alert("fill out the name");
+            document.getElementById("name").focus();
+            return false;
+        }
+        if (branch == "start") {
+            alert("select your branch");
+            document.getElementById("branch").focus();
+            return false;
+        }
+        if (py == "start") {
+            alert("select your year of passing out");
+            document.getElementById("py").focus();
+            return false;
+        }
+        if (hu == "") {
+            alert("fill out the hackerrank username");
+            document.getElementById("hu").focus();
+            return false;
+        }
+        if (cu == "") {
+            alert("fill out the CodeChef username");
+            document.getElementById("cu").focus();
+            return false;
+        }
+        if (cfu == "") {
+            alert("fill out the CodeForces Username");
+            document.getElementById("cfu").focus();
+            return false;
+        }
+        if (spoj == "") {
+            alert("fill out the Spoj Username");
+            document.getElementById("spoj").focus();
+            return false;
+        }
+        if (ibu == "") {
+            alert("fill out the InterviewBit Username");
+            document.getElementById("ibu").focus();
+            return false;
+        }
+        if (user_id.includes("@")) {
+            if (!user_id.split("@")[1].includes(".")) {
+                alert("Invalid email");
+                document.getElementById("roll_email").focus();
+                return false;
+            }
+
+        }
+        return true;
+    }
+    async function sign_in() {
+        document.getElementById("intimate").style.display = "block";
+        user_id = document.getElementById("roll_email").value;
+        password = document.getElementById("pass").value;
+        name = document.getElementById("name").value;
+        branch = document.getElementById("branch").value;
+        py = document.getElementById("py").value;
+        hu = document.getElementById("hu").value;
+        cu = document.getElementById("cu").value;
+        cfu = document.getElementById("cfu").value;
+        spoj = document.getElementById("spoj").value;
+        ibu = document.getElementById("ibu").value;
+        if (validate()) {
+             await fetch_and_storeData();
+            //alert("Everything looks well");
+        }
+        else {
+            document.getElementById("intimate").style.display = "none";
+        }
+    }
+</script>
+
+</html>

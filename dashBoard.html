@@ -4,30 +4,29 @@
             Online Judge Analyzer
         </title>
         <link rel="stylesheet" type="text/css" href="css\primaryStyles.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0/css/bootstrap.min.css"
-            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css">
         <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
-        <link href='https://fonts.googleapis.com/css?family=Lora' rel='stylesheet'>
+        <link href='https://fonts.googleapis.com/css?family=Cookie' rel='stylesheet'>
         <style> 
             h1
             {
                 margin: 25px;
                 color: red;
-                font-family: 'Lora';
+                font-family: 'Cookie';
+                font-size: 40pt;
             }
         </style>
         </head>
-    <body class="dashBoard-body" onload="init()">
+    <body class="dashBoard-body" onload="initialize()">
         <div class="banner">
             <br/>
            <a href="">
                <img src="assets/icons/home_30_active.png" alt="home icon" class="banner-icon"style="margin-top:180px;" title="Home">
             </a>
-            <a href="">
+            <a href="scoreBoard.html">
                <img src="assets/icons/leaderBoard_30_in_active.png" alt="leader board icon" class="banner-icon" title="Leader Board">
             </a>
-            <a href="">
+            <a href="profile.html">
                <img src="assets/icons/profile_30_in_active.png" alt="User profile icon" class="banner-icon" title="User Profile">
             </a>
             <a href="index.html">
@@ -72,12 +71,16 @@
                  <p class="card-info-answer" id="ib_rank">942750</p><br/>
                 <p class="card-info-title" >Total Score  : </p>
                  <p class="card-info-answer" id="ib_score">9063</p><br/>
-                <p class="card-info-title">Streak : </p>
-                 <p class="card-info-answer" id="ib_streak">0</p><br/>
+                <p  class="card-info-title" id="st">Streak : </p>
+                <!-- style="margin-left: -140px;margin-top: 0px;"
+                style="margin-left: -50px;margin-top: 5px;"  -->
+                 <p class="card-info-answer" id="ib_streak" >
+                    0
+                </p><br/>
             </div>
             <div class="card" id="card">
                 <p class="card-title">Hackerrank</p>
-                <p class="card-title" style="color: tomato;">Coming Soon...</p>
+                <p class="card-title" style="color: #09203f;">Coming Soon...</p>
             </div>
         </div>
         </center>
@@ -87,6 +90,7 @@
 <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
 <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-analytics.js"></script>
+<script src="script/firebaseConfig.js"></script>
     <script>
         var cc_rating,cc_stars,cc_hrating,cc_psolved;
         var cf_rating,cf_mrating;
@@ -110,23 +114,23 @@
         ib_streak = document.getElementById("ib_streak");
 
         var username;
-        function init()
+        function initialize()
         {
-            var firebaseConfig = {
-            apiKey: "AIzaSyC0-0VEr_p7XxTE9u5nJtdUJ75fkWA5L6Q",
-            authDomain: "onlinejudgeanalyzer.firebaseapp.com",
-            projectId: "onlinejudgeanalyzer",
-            storageBucket: "onlinejudgeanalyzer.appspot.com",
-            messagingSenderId: "202774544058",
-            appId: "1:202774544058:web:a43e02287ac1986be08c83",
-            measurementId: "G-KMG62JHYHR"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        firebase.analytics();
+            init();
             username = location.search.substring(1);
+            if(username)
             fetchData(username);
-
+            else
+            {
+                username = sessionStorage.getItem("userid");
+                if(username!="")
+                fetchData(username);
+                else
+                {
+                    alert("Access denied please login ...");
+                    location.href = "index.html";
+                }
+            }
         }
         function fetchData(userName)
         {
@@ -157,6 +161,13 @@
                 database.collection("interviewbit").doc(userName).get()
                 .then((doc)=>{
                     ib_rank.innerHTML = ""+doc.data().Rank+"";
+                    if(doc.data().Score<100)
+                    {
+                        document.getElementById("st").style.marginLeft = "-140px";
+                        document.getElementById("st").style.marginTop = "5px";
+                        ib_streak.style.marginLeft = "-50px";
+                        ib_streak.style.marginTop = "5px";
+                    }
                     ib_score.innerHTML = ""+doc.data().Score+"";
                     ib_streak.innerHTML = ""+doc.data().Streak+"";
                 });

@@ -1,138 +1,172 @@
 <html>
-    <head>
-        <title>
-            Online Judge Analyzer
-        </title>
-        <link rel="stylesheet" type="text/css" href="css\primaryStyles.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+
+<head>
+    <title>
+        Online Judge Analyzer
+    </title>
+    <link rel="stylesheet" type="text/css" href="css\primaryStyles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
-        <link href='https://fonts.googleapis.com/css?family=Lora' rel='stylesheet'>
-        <style> 
-            h1
-            {
-                margin: 25px;
-                color: red;
-                font-family: 'Sofia';
-            }
-        </style>
-    </head>
-    <body class="dashBoard-body" onload="init()">
-        <center>
+    <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Lora' rel='stylesheet'>
+    <style>
+        h1 {
+            margin: 25px;
+            color: red;
+            font-family: 'Sofia';
+        }
+    </style>
+</head>
+
+<body class="dashBoard-body" onload="initialize()">
+    <center>
         <h1>Score Board !!</h1>
     </center>
-        <div class="banner" style="margin-top: -100px;">
-            <br/>
-           <a href="">
-               <img src="assets/icons/home_30.png" alt="home icon" class="banner-icon"style="margin-top:180px;" title="Home">
-            </a>
-            <a href="">
-               <img src="assets/icons/leaderBoard_30_active.png" alt="leader board icon" class="banner-icon" title="Leader Board">
-            </a>
-            <a href="">
-               <img src="assets/icons/profile_30_in_active.png" alt="User profile icon" class="banner-icon" title="User Profile">
-            </a>
-            <a href="index.html">
-               <img src="assets/icons/signout_30.png" alt="Signout icon" class="banner-icon" title="Signout">
-            </a>
-        </div>
-        <center>
-        <table class="table table-striped table-dark" style="width:80%;">
+    <div class="banner" style="margin-top: -100px;">
+        <br />
+        <a href="dashBoard.html">
+            <img src="assets/icons/home_30.png" alt="home icon" class="banner-icon" style="margin-top:180px;"
+                title="Home">
+        </a>
+        <a href="">
+            <img src="assets/icons/leaderBoard_30_active.png" alt="leader board icon" class="banner-icon"
+                title="Leader Board">
+        </a>
+        <a href="profile.html">
+            <img src="assets/icons/profile_30_in_active.png" alt="User profile icon" class="banner-icon"
+                title="User Profile">
+        </a>
+        <a href="index.html">
+            <img src="assets/icons/signout_30.png" alt="Signout icon" class="banner-icon" title="Signout">
+        </a>
+    </div>
+    <center>
+        <table class="table table-striped table-dark" style="width:80%;border-radius:20px;border: none;">
             <thead>
                 <tr>
-                <th>S.no</th>
-                <th>Name</th>
-                <th>Roll No</th>
-                <th>CodeCheff</th>
-                <th>CodeForces</th>
-                <th>Spoj</th>
-                <th>Interview Bit</th>
-                <th>Total Score</th>
+                    <th>S.no</th>
+                    <th>Name</th>
+                    <th>Roll No</th>
+                    <th>CodeCheff</th>
+                    <th>CodeForces</th>
+                    <th>Spoj</th>
+                    <th>Interview Bit</th>
+                    <th>Total Score</th>
                 </tr>
             </thead>
             <tbody id="tbody">
             </tbody>
         </table>
+        <div class="intimate" id="intimate">
+            <div class="intimate-content">
+                <p>We are fetching the records please wait..</p>
+                <img src="assets/icons/loading_infy.gif" width="50px" height="50px"></img>
+            </div>
+        </div>
     </center>
-    </body>
-    <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-app.js"></script>
+</body>
+<script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-firestore.js"></script>
 <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
 <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-analytics.js"></script>
+<script src="script/firebaseConfig.js"></script>
 <script>
     var tbody = document.getElementById("tbody");
-    
-    var users=[];
-    var user={};
-    var sno=0;
-     function init()
-        {
-            var firebaseConfig = {
-            apiKey: "AIzaSyC0-0VEr_p7XxTE9u5nJtdUJ75fkWA5L6Q",
-            authDomain: "onlinejudgeanalyzer.firebaseapp.com",
-            projectId: "onlinejudgeanalyzer",
-            storageBucket: "onlinejudgeanalyzer.appspot.com",
-            messagingSenderId: "202774544058",
-            appId: "1:202774544058:web:a43e02287ac1986be08c83",
-            measurementId: "G-KMG62JHYHR"
-         };
-            // Initialize Firebase
-            firebase.initializeApp(firebaseConfig);
-            firebase.analytics();
-            var database = firebase.firestore();
-            database.collection("users").get()
-            .then((querySnapshot)=>{
+    var cc_rating, cf_rating, sp_score, ib_score;
+    var users = [];
+    var final_users = [];
+    var user = {};
+    var sno = 0;
+    var docs_length = 0;
+    function initialize() {
+        init();
+        document.getElementById("intimate").style.display = "block";
+        var database = firebase.firestore();
+        database.collection("users").get()
+            .then((querySnapshot) => {
+                docs_length = querySnapshot.size;
                 querySnapshot.forEach((doc) => {
-                    console.log(doc.id,"=>",doc.data().Total_Score);
-                    var id = doc.id;
                     user = {};
-                    user["id"]=doc.id.toString();
-                    user["score"]=doc.data().Total_Score;
-                    //console.log(user);
+                    var id = doc.id.toString();
+                    user["id"] = doc.id.toString();
+                    user["score"] = doc.data().Total_Score;
+                    user["name"] = doc.data().Name;
                     users.push(user);
                 });
-            }).then(()=>{
-                printData();
-            }).catch((error)=>{
-                console.log("Error getting records ",error);
+            }).then(() => {
+              //  console.log(users.length);
+                users.forEach((user) => {
+                    var id = user.id.toString();
+                    database.collection("codechef").doc(id).get()
+                        .then((docRef) => {
+                            user["cc_rating"] = docRef.data().Rating;
+                        })
+                        .then(() => {
+                            database.collection("codeforces").doc(id).get()
+                                .then((docRef) => {
+                                    user["cf_rating"] = docRef.data().Rating;
+                                }).then(() => {
+                                    database.collection("spoj").doc(id).get()
+                                        .then((docRef) => {
+                                            user["sp_score"] = docRef.data().Points * 500 + docRef.data().Solved * 20;
+                                        })
+                                        .then(() => {
+                                            database.collection("interviewbit").doc(id).get()
+                                                .then((docRef) => {
+                                                    user["ib_score"] = docRef.data().Score;
+                                                })
+                                                .then(() => {
+                                                    final_users.push(user);
+                                                    printData();
+                                                });
+                                        });
+                                });
+                        });
+                });
+            }).catch((error) => {
+                console.log("Error getting records ", error);
             });
-            //console.log(users);
-            
+    }
+    function printData() {
+        if (docs_length != final_users.length) {
+           // console.log(docs_length, "=>", final_users.length);
+            return;
         }
-        function printData()
-        {
-            function compareScores(a,b)
-            {
-                if(a.score>b.score)
-                    return -1;
-                if(a.score<b.score)
-                    return 1;
-                return 0;
-            }
-            console.log(users);
-            users = users.sort((a,b)=>{
-                return compareScores(a,b);
-            });
-            console.log(users);
-            users.forEach((u)=>{
-                var trow = document.createElement("tr");
-    var tds = document.createElement("td");
-    var tdn = document.createElement("td");
-    var tdr = document.createElement("td");
-    var tdcc = document.createElement("td");
-    var tdcf = document.createElement("td");
-    var tdsp = document.createElement("td");
-    var tdib = document.createElement("td");
-    var tdts = document.createElement("td");
-                tds.innerHTML = ++sno;
-                tdn.innerHTML="";
-                tdr.innerHTML = u["id"];
-                tdts.innerHTML = u["score"];
-                trow.appendChild(tds);trow.appendChild(tdn);trow.appendChild(tdr);trow.appendChild(tdcc);
-                trow.appendChild(tdcf);trow.appendChild(tdsp);trow.appendChild(tdib);trow.appendChild(tdts);
-                tbody.appendChild(trow);
-            });
+        function compareScores(a, b) {
+            if (a.score > b.score)
+                return -1;
+            if (a.score < b.score)
+                return 1;
+            return 0;
         }
+        final_users = final_users.sort((a, b) => {
+            return compareScores(a, b);
+        });
+        final_users.forEach((u) => {
+            var trow = document.createElement("tr");
+            var tds = document.createElement("td");
+            var tdn = document.createElement("td");
+            var tdr = document.createElement("td");
+            var tdcc = document.createElement("td");
+            var tdcf = document.createElement("td");
+            var tdsp = document.createElement("td");
+            var tdib = document.createElement("td");
+            var tdts = document.createElement("td");
+            tds.innerHTML = ++sno;
+            tdn.innerHTML = u["name"];
+            tdr.innerHTML = u["id"];
+            tdcc.innerHTML = u["cc_rating"];
+            tdcf.innerHTML = u["cf_rating"];
+            tdsp.innerHTML = u["sp_score"];
+            tdib.innerHTML = u["ib_score"];
+            tdts.innerHTML = u["score"];
+            trow.appendChild(tds); trow.appendChild(tdn); trow.appendChild(tdr); trow.appendChild(tdcc);
+            trow.appendChild(tdcf); trow.appendChild(tdsp); trow.appendChild(tdib); trow.appendChild(tdts);
+            tbody.appendChild(trow);
+        });
+        document.getElementById("intimate").style.display = "none";
+    }
 </script>
+
 </html>

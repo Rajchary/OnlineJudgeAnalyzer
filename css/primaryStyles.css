@@ -32,6 +32,7 @@
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  
 }
 .intimate-content
 {
@@ -40,6 +41,7 @@
   padding: 20px;
   border: 1px solid #888;
   width: 35%;
+  border-radius: 20px;
 }
 .submit-btn
 {
@@ -63,7 +65,6 @@
 {
     width:150px;
     height:50px;
-   /* margin-top:450px;*/
     cursor:pointer;
     background-color: red;
     border-radius: 7px;
@@ -85,7 +86,7 @@
     height:100%;
     width:70px;
     position: fixed;
-    /* box-shadow: 0px 0px 4px 4px #BDBDBD; */
+    /* box-shadow: 0px 0px 3px 1px #09203f;  */
 }
 .dashBoard-body
 {
@@ -104,19 +105,14 @@
     border-radius:20px;
     width: 250px;
     height:300px;
-    background-color: #0F122E;
+    background-image: linear-gradient(#667eea ,#764ba2);
     margin-top:50px;
-    /* margin-left: 100px; */
     float:left;
     transition: all 4s;
     visibility: hidden;
     opacity: 0;
     cursor: pointer;
 }
-/* .card:hover
-{
-    margin-top: 30px;
-} */
 .card-title
 {
     color:white;
@@ -138,7 +134,7 @@
 .card-info-answer
 {
     margin-top:-20px;
-    color: tomato;
+    color: #09203f;
     font-weight: 550;
     font-size: 15pt;
     font-family: 'Sofia';
@@ -164,4 +160,44 @@
 {
     background-color: #090a1b;
     color: #3D5AFE;
+}
+.profile-body
+{
+    background-color: #090a1b;
+}
+.profile-container
+{
+    width: 75%;
+    text-align: center;
+    height: 450px;
+    border-radius: 30px;
+    background-image: linear-gradient(#09203f ,#537895);
+    margin-left: 7%;
+}
+.username-field
+{
+    border-color: #3D5AFE;
+    width: 200px;
+    height: 45px;
+    margin:10px;
+    background-color: #0F122E;
+    border-radius: 10px;
+    outline:none;
+    color: white;
+    float: left;
+    padding-left: 15px;
+}
+.label
+{
+    color: white;
+    font-family: 'Prata';
+    font-size: 14pt;
+    margin:15px;
+    float: left;
+}
+.username-container
+{
+    margin: 10px;
+    width: fit-content;
+    overflow: hidden;
 }

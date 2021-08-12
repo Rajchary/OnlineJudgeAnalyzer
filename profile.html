@@ -1,0 +1,227 @@
+<html>
+
+<head>
+    <title>
+        Online Judge Analyzer
+    </title>
+    <link rel="stylesheet" type="text/css" href="css\primaryStyles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Lora' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Prata' rel='stylesheet'>
+    <style>
+        h1 {
+            margin: 25px;
+            color: red;
+            font-family: 'Sofia';
+        }
+        img
+        {
+            margin-top: 15px;
+            cursor: pointer;
+            transition: all .6s;
+        }
+        .button-holder
+        {
+            width: auto;
+            padding-top: 100px;   
+        }
+        .submit
+        {
+            background-color: #3D5AFE;
+            border-color: #3D5AFE;
+            color: white;
+            font-size: 12pt;
+            font-weight: bolder;
+            font-family: 'Prata';
+            width: 100px;
+            height: 40px;
+            text-align: center;
+            margin-right: 35px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all .6s;
+            outline: none;
+        }
+        .submit:hover
+        {
+            background-color: #0F122E;
+            color: #3D5AFE;
+        }
+        .clear
+        {
+            cursor: pointer;
+            background-color: red;
+            border-color: red;
+            color: white;
+            font-size: 15pt;
+            font-weight: bolder;
+            font-family: 'Prata';
+            width: 100px;
+            height: 40px;
+            text-align: center;
+            margin-right: 35px;
+            border-radius: 15px;
+            transition: all .6s;
+            outline: none;
+        }
+        .clear:hover
+        {
+            background-color: #0F122E;
+            color: red;
+        }
+    </style>
+</head>
+<body class="profile-body" onload="initialize()">
+    <center>
+        <h1>User Profile !!</h1>
+    </center>
+    <div class="banner" style="margin-top: -100px;">
+        <br />
+        <a href="dashBoard.html">
+            <img src="assets/icons/home_30.png" alt="home icon" class="banner-icon" style="margin-top:180px;"
+                title="Home">
+        </a>
+        <a href="scoreBoard.html">
+            <img src="assets/icons/leaderBoard_30_in_active.png" alt="leader board icon" class="banner-icon"
+                title="Leader Board">
+        </a>
+        <a href="">
+            <img src="assets/icons/profile_30_active.png" alt="User profile icon" class="banner-icon"
+                title="User Profile">
+        </a>
+        <a href="index.html">
+            <img src="assets/icons/signout_30.png" alt="Signout icon" class="banner-icon" title="Signout">
+        </a>
+    </div>
+    <center>
+    <div class="profile-container">
+        <div style="float: left;">
+        <div class="username-container" style="padding-top: 50px;">
+            <p class="label">CodeChef </p>
+            <input type="text" class="username-field" style="margin-left: 33px;" readonly id="codechef"/>
+            <img src="assets/icons/edit_30_in_active.png" alt="edit" onclick="edit(0)" id="cc">
+        </div><br/>
+
+        <div class="username-container" >
+            <p class="label">CodeForces </p>
+            <input type="text" class="username-field" readonly id="codeforces"/>
+            <img src="assets/icons/edit_30_in_active.png" alt="edit" onclick="edit(1)"id="cf">
+        </div><br/>
+        <div class="username-container" >
+            <p class="label">Spoj  </p>
+            <input type="text" class="username-field" style="margin-left: 80px;" id="spoj" readonly/>
+            <img src="assets/icons/edit_30_in_active.png" alt="edit" onclick="edit(2)" id="sp">
+        </div><br/>
+        </div>
+        <div style="float: right;margin-right: 100px;">
+            <div class="username-container" style="padding-top: 50px;">
+                <p class="label">InterviewBit  </p>
+                <input type="text" class="username-field" readonly id="interviewbit"/>
+                <img src="assets/icons/edit_30_in_active.png" alt="edit" onclick="edit(3)" id="ib">
+            </div><br/>
+            <div class="username-container" style="padding-top: 50px;">
+                <p class="label">HackerRank  </p>
+                <input type="text" class="username-field" readonly id="hackerrank"/>
+                <img src="assets/icons/edit_30_in_active.png" alt="edit" onclick="edit(4)" id="hr">
+            </div><br/>
+        </div>
+        <div class="button-holder">
+            <button class="submit" onclick="update_usernames()">Save</button>
+            <!-- <button class="clear">Clear</button> -->
+        </div>
+    </div>
+</center>
+<script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-firestore.js"></script>
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-analytics.js"></script>
+<script src="script/firebaseConfig.js"></script>
+<script>
+    usernames = [];
+    var codechef = document.getElementById("codechef");
+    usernames.push(codechef);
+    var codeforces = document.getElementById("codeforces");
+    usernames.push(codeforces);
+    var spoj = document.getElementById("spoj");
+    usernames.push(spoj);
+    var interviewbit = document.getElementById("interviewbit");
+    usernames.push(interviewbit);
+    var hackerrank = document.getElementById("hackerrank");
+    usernames.push(hackerrank);
+    var cimg = document.getElementById("cc");
+    var fimg = document.getElementById("cf");
+    var simg = document.getElementById("sp");
+    var iimg = document.getElementById("ib");
+    var himg = document.getElementById("hr");
+    var images = [];
+    var change = [0,0,0,0,0];
+    images.push(cimg);images.push(fimg);images.push(simg);images.push(iimg);images.push(himg);
+    var database;
+    var username;
+    var userData = {};
+    function edit(index)
+    {
+        if(change[index]==0)
+        {
+            usernames[index].readOnly = false;
+            usernames[index].focus();
+            images[index].src = "assets/icons/commit_active.png";
+            change[index] = 1;
+        }
+        else
+        {
+            usernames[index].readOnly = true;
+            images[index].src = "assets/icons/edit_30_in_active.png";
+            change[index] = 0;
+        }
+    }
+    function initialize()
+    {
+        init();
+        database = firebase.firestore();
+        username = sessionStorage.getItem("userid");
+        if(username!="")
+        {
+            database.collection("users").doc(username).get()
+            .then((docRef)=>{
+                if(docRef.exists)
+                {
+                    //console.log(docRef.data());
+                    usernames[0].value = ""+docRef.data().Codechef_Username+"";
+                    usernames[1].value = ""+docRef.data().Codeforces_Username+"";
+                    usernames[2].value = ""+docRef.data().Spoj_Username+"";
+                    usernames[3].value = ""+docRef.data().InterviewBit_Username+"";
+                    usernames[4].value = ""+docRef.data().Hackerrank_Username+"";
+                }
+                else
+                {
+                    alert("Records Not available");
+                    location.href = "index.html";
+                }
+            })
+        }
+        else
+        {
+            alert("Access denied!!");
+            location.href = "index.html";
+        }
+        
+    }
+    function update_usernames()
+    {
+        database.collection("users").doc(username).update({
+            Codechef_Username : usernames[0].value,
+            Codeforces_Username : usernames[1].value,
+            Spoj_Username : usernames[2].value,
+            InterviewBit_Username : usernames[3].value,
+            Hackerrank_Username : usernames[4].value,
+        }).then(()=>{
+            alert("Data Updated!");
+        });
+    }   
+</script>
+</body>
+</html>
